@@ -109,8 +109,7 @@ public class Table {
     public int getPlayer1Potted(String player1Colour) {
         int player1Potted = 0;
         for(Ball ball : balls) {
-            if(ball.colour.equals(player1Colour) && !ball.isOnTable) {}
-            player1Potted++;
+            if(ball.colour.equals(player1Colour) && !ball.isOnTable) {player1Potted++;}
         }
         return player1Potted;
     }
@@ -118,8 +117,7 @@ public class Table {
     public int getPlayer2Potted(String player2Colour) {
         int player2Potted = 0;
         for(Ball ball : balls) {
-            if(ball.colour.equals(player2Colour) && !ball.isOnTable) {}
-            player2Potted++;
+            if(ball.colour.equals(player2Colour) && !ball.isOnTable) {player2Potted++;}
         }
         return player2Potted;
     }

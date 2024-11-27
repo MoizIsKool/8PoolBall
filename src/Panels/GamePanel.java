@@ -100,11 +100,14 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     void determineWin() {
-        if(table.getPlayer1Potted(player1Colour) == 4) {
+        if(table.getPlayer1Potted(player1Colour) == 5) {
             JOptionPane.showMessageDialog(null, "Player 1 Wins!", "Winner", JOptionPane.INFORMATION_MESSAGE);
+            System.exit(0);
         }
-        if(table.getPlayer2Potted(player2Colour) == 4) {
+        System.out.println("player 1 potted: " + table.getPlayer1Potted(player1Colour));
+        if(table.getPlayer2Potted(player2Colour) == 5) {
             JOptionPane.showMessageDialog(null, "Playwr 2 Wins!!", "Winner", JOptionPane.INFORMATION_MESSAGE);
+            System.exit(0);
         }
     }
 
