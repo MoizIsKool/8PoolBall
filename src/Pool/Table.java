@@ -100,10 +100,29 @@ public class Table {
                 g2.setColor(Color.WHITE);
                 g2.fillOval((int)ball.posX, (int)ball.posY, (int)Ball.diameter, (int)Ball.diameter);
             } else if(ball.isOnTable) {
-                g2.setColor(ball.colour.equals("RED") ? Color.RED : Color.BLUE);
-                g2.fillOval((int)ball.posX, (int)ball.posY, (int)Ball.diameter, (int)Ball.diameter);
+                g2.drawImage(ball.currentImage, (int)ball.posX, (int) ball.posY, null);
             }
         }
+    }
+
+    public void updateBallAnimation() {
+        for(Ball ball: balls) {
+            ball.updateCurrentImage();
+            if(ball.isOnTable && ballMoving(ball)) {
+                ball.animationCounter++;
+                System.out.println(ball.animationCounter);
+            }
+            if(ball.animationCounter > 5) {
+                updateBallImageIndex(ball);
+            }
+        }
+    }
+
+    private void updateBallImageIndex(Ball ball) {
+        ball.animationCounter = 0;
+        if(ball.imageIndex < 3) {
+            ball.imageIndex++;
+        } else ball.imageIndex = 0;
     }
 
     public int getPlayer1Potted(String player1Colour) {
@@ -153,6 +172,12 @@ public class Table {
             xPos2 += 60;
         }
 
+    }
+
+    public boolean ballMoving(Ball ball) {
+        if(ball.velX != 0 || ball.velY != 0) {
+            return true;
+        } else return false;
     }
 
     public boolean ballsMoving() {

@@ -101,12 +101,12 @@ public class GamePanel extends JPanel implements ActionListener {
 
     void determineWin() {
         if(table.getPlayer1Potted(player1Colour) == 5) {
-            JOptionPane.showMessageDialog(null, "Player 1 Wins!", "Winner", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Player 1 (" + player1Name + ") Wins!", "Winner", JOptionPane.INFORMATION_MESSAGE);
             System.exit(0);
         }
         System.out.println("player 1 potted: " + table.getPlayer1Potted(player1Colour));
         if(table.getPlayer2Potted(player2Colour) == 5) {
-            JOptionPane.showMessageDialog(null, "Playwr 2 Wins!!", "Winner", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Player 2 (" + player2Name + ") Wins!", "Winner", JOptionPane.INFORMATION_MESSAGE);
             System.exit(0);
         }
     }
@@ -115,6 +115,7 @@ public class GamePanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == timer) {
             determineWin();
+            table.updateBallAnimation();
             table.update();
             checkCollisions();
             updateCue();
