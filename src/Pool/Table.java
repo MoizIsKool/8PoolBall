@@ -125,23 +125,34 @@ public class Table {
     }
 
     public void drawPottedBalls(Graphics2D g2, String player1Colour, String player2Colour) {
-        int player1Potted = 0;
-        int player2Potted = 0;
+        int player1Potted = 0, player2Potted = 0;
         for(Ball ball : balls) {
             if(!ball.isOnTable && ball.colour.equals(player1Colour)) {player1Potted++;}
             if(!ball.isOnTable && ball.colour.equals(player2Colour)) {player2Potted++;}
         }
 
+        if(player1Colour.equals("RED")) {
+            g2.setColor(Color.RED);
+        } else {
+            g2.setColor(Color.BLUE);
+        }
+
         int xPos1 = 60;
         for(int i = 0; i < player1Potted; i++) {
-            g2.fillOval(50+xPos1, 720, (int) Ball.diameter, (int) Ball.diameter);
+            g2.fillOval(300+xPos1, 720-40, (int) Ball.diameter, (int) Ball.diameter);
             xPos1 += 60;
+        }
+
+        if(player2Colour.equals("RED")) {
+            g2.setColor(Color.RED);
+        } else {
+            g2.setColor(Color.BLUE);
         }
 
         int xPos2 = 60;
         for(int i = 0; i < player2Potted; i++) {
-            g2.fillOval(50+xPos2, 760, (int) Ball.diameter, (int) Ball.diameter);
-            xPos1 += 60;
+            g2.fillOval(300+xPos2, 760-20, (int) Ball.diameter, (int) Ball.diameter);
+            xPos2 += 60;
         }
 
     }

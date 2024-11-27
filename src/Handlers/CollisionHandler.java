@@ -4,7 +4,7 @@ import Pool.Ball;
 import Pool.Hole;
 import Pool.Table;
 
-public class CollisionDetection {
+public class CollisionHandler {
 
     public void checkWallCollision(Table table) {
         for (Ball ball : table.balls) {
@@ -37,7 +37,6 @@ public class CollisionDetection {
                 if(ball != otherBall && ball.isOnTable && otherBall.isOnTable) {
                     double distance = Math.sqrt(Math.pow(ball.posX - otherBall.posX, 2) + Math.pow(ball.posY - otherBall.posY, 2));
                     if(distance < Ball.diameter) {
-                        offsetBalls(ball, otherBall, distance);
                         ballResolution(ball, otherBall);
                     }
                 }
@@ -45,43 +44,41 @@ public class CollisionDetection {
         }
     }
 
-    private void offsetBalls(Ball ball1, Ball ball2, double distance) {
-        double overlap = Ball.diameter - distance;
-        double dx = ((ball2.posX - ball1.posX) / distance)*overlap;
-        double dy = ((ball2.posY - ball1.posY) / distance)*overlap;
+    public void ballResolution (Ball b1, Ball b2) {
 
-        ball1.posX -= dx;
-        ball1.posY -= dy;
-        ball2.posX += dx;
-        ball2.posY += dy;
+        offset(b2, b1);
 
+        double xDistance = (b1.posX + Ball.diameter/2) - (b2.posX + Ball.diameter/2);
+        double yDistance = (b1.posY + Ball.diameter/2) - (b2.posY + Ball.diameter/2);
+        double xVelDiff = b2.velX - b1.velX;
+        double yVelDiff = b2.velY - b1.velY;
+
+        double distanceSquared = xDistance * xDistance + yDistance * yDistance;
+        double dotProduct = xDistance * xVelDiff + yDistance * yVelDiff;
+
+        if (dotProduct > 0) {
+            double colScale = dotProduct / distanceSquared;
+            double xComponent = xDistance * colScale;
+            double yComponent = yDistance * colScale;
+
+            b1.velX += xComponent;
+            b1.velY += yComponent;
+            b2.velX -= xComponent;
+            b2.velY -= yComponent;
+        }
     }
 
-    private void ballResolution(Ball ball1, Ball ball2) {
-        double numeratorX1 = (ball2.velX - ball1.velX) * (ball2.posX - ball1.posX);
-        double numeratorSideX1 = (ball2.posX - ball1.posX);
+    private void offset(Ball b1, Ball b2) {
+        double overlap = Ball.diameter/2 + Ball.diameter/2 - distance(b1, b2);
 
-        double numeratorX2 = (ball1.velX - ball2.velX) * (ball1.posX - ball2.posX);
-        double numeratorSideX2 = (ball1.posX - ball2.posX);
-
-        double denominatorX = Math.pow(ball2.posX - ball1.posX, 2);
-
-        ball1.velX = ball1.velX + (numeratorX1/denominatorX) * numeratorSideX1;
-        ball2.velX = ball2.velX + (numeratorX2/denominatorX) * numeratorSideX2;
-
-        double numeratorY1 = (ball2.velY - ball1.velY) * (ball2.posY - ball1.posY);
-        double numeratorSideY1 = (ball2.posY - ball1.posY);
-
-        double numeratorY2 = (ball1.velY - ball2.velY) * (ball1.posY - ball2.posY);
-        double numeratorSideY2 = (ball1.posY - ball2.posY);
-
-        double denominatorY = Math.pow(ball2.posY - ball1.posY, 2);
-
-        ball1.velY = ball1.velY + (numeratorY1/denominatorY) * numeratorSideY1;
-        ball2.velY = ball2.velY + (numeratorY2/denominatorY) * numeratorSideY2;
-
+        double theta = Math.atan2(((b1.posY + Ball.diameter/2) - (b2.posY + Ball.diameter/2)), ((b1.posX + Ball.diameter/2) - (b2.posX + Ball.diameter/2)));
+        b2.posX -= (int) Math.round(overlap * Math.cos(theta));
+        b2.posY -= (int) Math.round(overlap * Math.sin(theta));
     }
 
+    private static double distance (Ball b1, Ball b2){
+        return Math.sqrt(Math.pow((b2.posX+Ball.diameter/2) - (b1.posX + Ball.diameter/2), 2) + Math.pow((b2.posY+Ball.diameter/2) - (b1.posY + Ball.diameter/2), 2));
+    }
 
     public void checkBallInHole(Hole[] holes, Ball[] balls) {
         for(Hole hole : holes) {

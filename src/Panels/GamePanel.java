@@ -24,7 +24,7 @@ public class GamePanel extends JPanel implements ActionListener {
     Table table;
     Cue cue = new Cue();
 
-    CollisionDetection collisionDetection = new CollisionDetection();
+    CollisionHandler collisionHandler = new CollisionHandler();
 
     public GamePanel(String player1Name, String player2Name, String player1Colour, String player2Colour) {
 
@@ -77,9 +77,9 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public void checkCollisions() {
-        collisionDetection.checkWallCollision(table);
-        collisionDetection.checkBallBallCollision(table);
-        collisionDetection.checkBallInHole(table.holes, table.balls);
+        collisionHandler.checkWallCollision(table);
+        collisionHandler.checkBallBallCollision(table);
+        collisionHandler.checkBallInHole(table.holes, table.balls);
     }
 
     void resetBall() {
@@ -111,6 +111,7 @@ public class GamePanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == timer) {
+            determineWin();
             table.update();
             checkCollisions();
             updateCue();

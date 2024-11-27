@@ -14,9 +14,7 @@ public class Hole {
     }
 
     public boolean isBallInHole(Ball ball) {
-        double distance = Math.sqrt(Math.pow(ball.posX - this.posX, 2) + Math.pow(ball.posY - this.posY, 2));
-        if(distance < (Ball.diameter /2 + this.diameter/2) - extraDistance) {
-            return true;
-        } else return false;
+        double distance = Math.sqrt(Math.pow((ball.posX+Ball.diameter/2) - (this.posX+this.diameter/2), 2) + Math.pow((ball.posY+Ball.diameter/2) - (this.posY+this.diameter/2), 2));
+        return distance < (Ball.diameter / 2 + this.diameter / 2);
     }
 }
